@@ -1,0 +1,13 @@
+development:
+  adapter: mysql2
+  encoding: utf8
+  database: cz_auth_development
+  username: root
+  password:
+
+test:
+  adapter: mysql2
+  encoding: utf8
+  database: cz_auth_test
+  username: root
+  password:

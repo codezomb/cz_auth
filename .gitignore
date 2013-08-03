@@ -1,0 +1,16 @@
+._*
+.bundle
+.DS_Store
+.rvmrc
+.ruby-version
+.ruby-gemset
+
+*.swp
+database.yml
+application.yml
+
+tmp/*
+log/*
+spec/dummy/log/*
+
+!spec/dummy/config/database.yml
