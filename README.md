@@ -16,19 +16,14 @@ You can also work with existing models, by adding the following to an existing m
 requires_authentication
 ```
 
-If you want to remotely authenticate with another server running cz_auth you can add that as well
-```ruby
-requires_authentication remote_auth_url: 'https://example.com/users/authentication'
-```
-
 Add the following to the top of `application_controller.rb`
 ```ruby
-include BqAuth::Concerns::Authentication
+include CzAuth::Concerns::Authentication
 ```
 
 Add the following to the top of `routes.rb`
 ```ruby
-mount BqAuth::Engine => "/"
+mount CzAuth::Engine => "/"
 ```
 
 Details
