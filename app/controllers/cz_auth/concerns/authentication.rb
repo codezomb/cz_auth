@@ -21,7 +21,7 @@ module CzAuth
               if resource.instance_methods.include?(:password)
                 model
               end
-            end.compact!
+            end
           end
         end
 
@@ -40,31 +40,22 @@ module CzAuth
         # Convenience method to wrap authentication method, and cookie creation
         def perform_authentication_for(resource)
           authenticated = resource.try(:authenticate, credentials[:password] || auth_token)
-          create_session_cookie_for(authenticated)
+          create_session_for(authenticated)
           return authenticated
         end
 
         # Create a cookie with the auth_token as the value
         # Will set expiration to the return value of session_length
-        def create_session_cookie_for(resource)
-          if defined?(cookies) && !!resource
-            cookies.signed[:auth_token] = {
-              value: resource.auth_token,
-              expires: resource.session_length.from_now,
-              domain: :all
-            }
+        def create_session_for(resource)
+          if defined?(session) && !!resource
+            session[:auth_token] = resource.auth_token
           end
-        end
-
-        # Removes the session cookie
-        def delete_session_cookie
-          cookies.delete(:auth_token, domain: :all)
         end
 
         # Fetch the auth_token from either the URL, or HTTP Header
         def auth_token
           auth_token = request.headers["X-AUTH-TOKEN"] || params[:auth_token]
-          auth_token ||= cookies.signed[:auth_token] if defined?(cookies)
+          auth_token ||= session[:auth_token] if defined?(session)
           auth_token
         end
 
@@ -85,22 +76,12 @@ module CzAuth
 
         # Returns an instance of the currently authenticated resource, or nil
         def current_resource(var)
-          variable = "@current_#{var}"
-          if instance_variable_defined?(variable)
-            instance_variable_get(variable)
-          else
-            instance_variable_set(variable, perform_authentication_for(query_resource(var)))
-          end
+          @current_resource ||= perform_authentication_for(query_resource(var))
         end
 
         # Returns boolean describing whether or not a resource is currently signed in
         def resource_signed_in?(var)
-          variable = "@#{var}_signed_in"
-          if instance_variable_defined?(variable)
-            instance_variable_get(variable)
-          else
-            instance_variable_set(variable, !!current_resource(var))
-          end
+          @resource_signed_in ||= !!current_resource(var)
         end
 
         # Called to protect a controller

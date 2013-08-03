@@ -24,13 +24,6 @@ module CzAuth
       save
     end
 
-    # Set the default length of the session
-    # Override to set different value
-    # Default: 2.weeks
-    def session_length
-      2.weeks
-    end
-
   end
 end
 
