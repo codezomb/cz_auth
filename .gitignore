@@ -12,5 +12,6 @@ application.yml
 tmp/*
 log/*
 spec/dummy/log/*
+*.gem
 
 !spec/dummy/config/database.yml
