@@ -7,23 +7,14 @@ Usage
 =
 
 ```shell
-rails g cz_auth:install <model_name>
+rails g cz_auth:install
+rails g cz_auth:model <model_name>
 rake db:migrate
 ```
 
 You can also work with existing models, by adding the following to an existing model
 ```ruby
 requires_authentication
-```
-
-Add the following to the top of `application_controller.rb`
-```ruby
-include CzAuth::Concerns::Authentication
-```
-
-Add the following to the top of `routes.rb`
-```ruby
-mount CzAuth::Engine => "/"
 ```
 
 Details

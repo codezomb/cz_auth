@@ -1,0 +1,8 @@
+controller:
+  file:   app/controllers/application_controller.rb
+  line:   include CzAuth::Concerns::Authentication
+  after:  ActionController::Base
+routes:
+  file:   config/routes.rb
+  line:   mount CzAuth::Engine => '/'
+  after:  Application.routes.draw do

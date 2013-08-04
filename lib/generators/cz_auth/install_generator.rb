@@ -3,17 +3,25 @@ require 'rails/generators/migration'
 
 class CzAuth::InstallGenerator < Rails::Generators::Base
   include Rails::Generators::Migration
-  desc "Installs the CzAuth Models, Migrations."
+  desc "Installs CZAuth Required Files/Lines."
 
-  argument :user_model, :type => :string, :required => false, :default => "User", :desc => "Your user model name."
-
-  def create_models
-    model = user_model.singularize
-    generate("model", "#{model} email password_digest auth_token password_reset_token")
-    if File.exists?("app/models/#{user_model}.rb")
-      inject_into_file "app/models/#{user_model}.rb", :after => "ActiveRecord::Base" do
-        "\n\trequires_authentication"
+  def injections
+    [
+      {
+        file:   "app/controllers/application_controller.rb",
+        line:   "\n\tinclude CzAuth::Concerns::Authentication",
+        after:  "ActionController::Base"
+      },
+      {
+        file:   "config/routes.rb",
+        line:   "\n\tmount CzAuth::Engine => '/'",
+        after:  "routes.draw do"
+      }
+    ].each do |injection|
+      inject_into_file injection[:file], after: injection[:after] do
+        injection[:line]
       end
     end
   end
+
 end
