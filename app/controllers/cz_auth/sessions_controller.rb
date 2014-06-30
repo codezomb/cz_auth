@@ -1,7 +1,7 @@
 module CzAuth
   class SessionsController < ApplicationController
 
-    skip_before_filter { :"authorize_#{resource_model}!" }
+    respond_to :html
     respond_to :json, except: :new
 
     def new

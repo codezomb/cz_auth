@@ -1,0 +1,12 @@
+image: phusion/passenger-full
+env:
+  - RAILS_ENV=test
+script:
+  - sudo apt-get -y install libmysqlclient-dev 
+  - bundle install
+  - bundle exec rake db:schema:load
+  - bundle exec rspec
+  - bundle exec cucumber
+services:
+  - mysql
+
